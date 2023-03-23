@@ -1,5 +1,5 @@
  import React, { Component } from 'react';
- import csv from '../services/csv';
+ import csv from '../services/csv'; //dados mockados do CSV
 
  export default class SearchComponent extends Component {
 
@@ -13,20 +13,19 @@
       };
 
     componentDidMount() {
-        const cities = Object.keys(csv);
+        const cities = Object.keys(csv); //transforma as keys do csv em um array de cidades
         this.setState({cities: cities});
-        console.log(cities);
     };
 
     onInputChange = ({ target }) => {
-        const value = target.value;
+        const value = target.value; 
         this.setState({
-          [target.name]: value,
+          [target.name]: value, // seta os estados dos inputs
         });
     };
     
     printCitiesList = () => {
-        const list = this.state.cities.map((city) => (
+        const list = this.state.cities.map((city) => ( // cria um elemento de input para cada cidade
           <option
             key={ city }
             value={ city }
@@ -38,7 +37,7 @@
       };
     
     shipmentTotal = async () => {
-        for (let key in csv) {
+        for (let key in csv) { // nested loops para verificar as distancias entre city1 e city 2
           if (this.state.city1 === key){
              for (let key2 in csv[key]) {
               if (this.state.city2 === key2){
@@ -50,7 +49,7 @@
           }
         };
         
-        switch ( this.state.truck ){
+        switch ( this.state.truck ){ // switch case para calcular o totalPrice com base na distancia e valor por km
           case "Caminhão de pequeno porte (1 Ton)" :
             await this.setState({ totalPrice: this.state.totalDistance * 4.87 });
             break;
@@ -101,8 +100,8 @@
                     <option value="Caminhão de grande porte (10 Ton)">Caminhão de grande porte (10 Ton)</option>
                 </select>
             </label>
-            <p>de { this.state.city1 } para { this.state.city2 }, utilizando um { this.state.truck }, a distância é de { this.state.totalDistance } km e o custo será de R$ { this.state.totalPrice.toFixed(2) }.</p>
             <button onClick={ this.shipmentTotal }> teste </button>
+            <p>de { this.state.city1 } para { this.state.city2 }, utilizando um { this.state.truck }, a distância é de { this.state.totalDistance } km e o custo será de R$ { this.state.totalPrice.toFixed(2) }.</p>
         </div>
       )
     }
