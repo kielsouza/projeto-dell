@@ -37,27 +37,28 @@
         return list;
       };
     
-    shipmentTotal = () => {
+    shipmentTotal = async () => {
         for (let key in csv) {
           if (this.state.city1 === key){
              for (let key2 in csv[key]) {
               if (this.state.city2 === key2){
-                this.setState({
+                await this.setState({
                   totalDistance: csv[key][key2],
                 })
               }
             }
           }
-        }
+        };
+        
         switch ( this.state.truck ){
           case "Caminhão de pequeno porte (1 Ton)" :
-            this.setState({ totalPrice: this.state.totalDistance * 4.87 });
+            await this.setState({ totalPrice: this.state.totalDistance * 4.87 });
             break;
           case "Caminhão de médio porte (4 Ton)" :
-            this.setState({ totalPrice: this.state.totalDistance * 11.92 });
+            await this.setState({ totalPrice: this.state.totalDistance * 11.92 });
             break;
           case "Caminhão de grande porte (10 Ton)" :
-            this.setState({ totalPrice: this.state.totalDistance * 27.44 });
+            await this.setState({ totalPrice: this.state.totalDistance * 27.44 });
             break;
           default :
             break;
