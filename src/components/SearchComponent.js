@@ -8,6 +8,8 @@
         city1: "ARACAJU",
         city2: "ARACAJU",
         truck: "Caminhão de pequeno porte (1 Ton)",
+        totalDistance: 0,
+        totalPrice: 0,
       };
 
     componentDidMount() {
@@ -35,19 +37,38 @@
         return list;
       };
     
-    /* shipmentTotal = () => {
-        csv.forEach((city) => {
-            if (this.state.city1 === city) {
-                console.log(city);
+    shipmentTotal = () => {
+        for (let key in csv) {
+          if (this.state.city1 === key){
+             for (let key2 in csv[key]) {
+              if (this.state.city2 === key2){
+                this.setState({
+                  totalDistance: csv[key][key2],
+                })
+              }
             }
-        });
-    }; */
+          }
+        }
+        switch ( this.state.truck ){
+          case "Caminhão de pequeno porte (1 Ton)" :
+            this.setState({ totalPrice: this.state.totalDistance * 4.87 });
+            break;
+          case "Caminhão de médio porte (4 Ton)" :
+            this.setState({ totalPrice: this.state.totalDistance * 11.92 });
+            break;
+          case "Caminhão de grande porte (10 Ton)" :
+            this.setState({ totalPrice: this.state.totalDistance * 27.44 });
+            break;
+          default :
+            break;
+        };
+    };
     render() {
       return (
         <div>
-            <p>Consulte o seu transporte: </p>
+            <p>Consulte o seu transporte </p>
             <label htmlFor="city-1-input">
-            Cidade Origem:
+            Cidade Origem
             <select
                 data-testid="city-1-input"
                 name="city1"
@@ -57,7 +78,7 @@
             </select>
             </label>
             <label htmlFor="city-2-input">
-            Cidade Destino:
+            Cidade Destino
             <select
                 data-testid="city-2-input"
                 name="city2"
@@ -67,7 +88,7 @@
             </select>
             </label>
             <label htmlFor="truck-input">
-                Transporte Selecionado:
+                Transporte Selecionado
                 <select
                     data-testid="truck-input"
                     name="truck"
@@ -79,7 +100,8 @@
                     <option value="Caminhão de grande porte (10 Ton)">Caminhão de grande porte (10 Ton)</option>
                 </select>
             </label>
-            <p>de { this.state.city1 } para { this.state.city2 }, utilizando um { this.state.truck }, a distância é de XXX km e o custo será de R$ xxx,00.</p>
+            <p>de { this.state.city1 } para { this.state.city2 }, utilizando um { this.state.truck }, a distância é de { this.state.totalDistance } km e o custo será de R$ { this.state.totalPrice.toFixed(2) }.</p>
+            <button onClick={ this.shipmentTotal }> teste </button>
         </div>
       )
     }
