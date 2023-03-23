@@ -1,4 +1,4 @@
-const distances = {
+const distances = { //json criado com auxilio de ferramenta externa csv to json
     "ARACAJU": {
       "ARACAJU": 0,
       "BELEM": 2079,
