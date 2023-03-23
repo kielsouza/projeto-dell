@@ -7,6 +7,7 @@ export default function SearchPage() {
   return (
     <div>
         <ProductsTable />
+        <AddShipmentComponent />
     </div>
   )
 }

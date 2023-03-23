@@ -50,9 +50,10 @@ export default class ProductsTable extends Component {
                                 <td>{ product.productName }</td>
                                 <td>{ product.productWeight }</td>
                                 <td>
-                                    <input type="number" name={ product.id } onChange={ this.onInputChange } value={ `${product.id}` }></input>
+                                    <input type="number" name={ product.id } onChange={ this.onInputChange } defaultValue = "0"></input>
                                 </td>
-                                <td>{ product.productWeight }</td>
+                                { console.log(product.id) }
+                                <td>{ product.productWeight * this.state[product.id] }</td>
                                 <td>
                                     <button
                                         type="button"
