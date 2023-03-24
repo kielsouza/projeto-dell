@@ -1,7 +1,7 @@
 
 # Projeto Dell IT Academy
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.en-us.md)
-[![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/jonatasemidio/multilanguage-readme-pattern/blob/master/README.md)
+[![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.md)
 
 - Esta atividade consiste no desenvolvimento de uma simulação para um sistema de transporte interestadual de cargas.
 - Os dados de distância entre as cidades estão disponíveis no arquivo CSV anexo. 
