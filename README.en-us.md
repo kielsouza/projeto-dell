@@ -1,4 +1,6 @@
 # Dell IT Academy project
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.en-us.md)
+[![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.md)
 
 - This activity consists of developing a simulation for an interstate freight transport system.
 - Distance data between cities is available in the attached CSV file.

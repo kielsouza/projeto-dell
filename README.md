@@ -1,5 +1,7 @@
 
 # Projeto Dell IT Academy
+[![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.en-us.md)
+[![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.md)
 
 - Esta atividade consiste no desenvolvimento de uma simulação para um sistema de transporte interestadual de cargas.
 - Os dados de distância entre as cidades estão disponíveis no arquivo CSV anexo. 
@@ -66,3 +68,4 @@ A empresa LeMour deseja transportar o total de 500 celulares, 100 geladeiras, 20
 4. Não é necessário gravar dados em nenhum formato, nem usar sistemas de banco de dados.
 
 5. O programa deverá lidar com dados de entrada inválidos e informar uma mensagem adequada caso ocorram. Lembre-se de demonstrar isso nas capturas de tela ao realizar os testes.
+    
