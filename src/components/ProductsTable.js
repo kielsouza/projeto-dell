@@ -27,6 +27,7 @@ export default class ProductsTable extends Component {
         var weightColumn = document.getElementsByClassName("weight-column");
         var weight = 0;
         for (let i = 0; i < 5; i++) {
+            console.log()
             weight += parseFloat(weightColumn[i].innerHTML);
         };
         this.setState({
@@ -37,7 +38,7 @@ export default class ProductsTable extends Component {
     onInputChange = ({ target }) => {
         const value = target.value; 
         this.setState({
-          [target.id]: value, // seta os estados dos inputs
+          [target.name]: value, // seta os estados dos inputs
         }, () => this.sumTotalWeight());
     };
 

@@ -66,7 +66,6 @@
     render() {
       return (
         <div>
-            <p>Consulte o seu transporte </p>
             <label htmlFor="city-1-input">
             Cidade Origem
             <select
