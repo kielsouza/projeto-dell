@@ -20,13 +20,6 @@ export default class AddShipmentComponent extends Component {
         this.setState({cities: cities});
     };
 
-    onInputChange = ({ target }) => {
-        const value = target.value; 
-        this.setState({
-          [target.name]: value, // seta os estados dos inputs
-        });
-    };
-
     printCitiesList = () => {
         const list = this.state.cities.map((city) => ( // cria um elemento de input para cada cidade
           <option
@@ -38,8 +31,14 @@ export default class AddShipmentComponent extends Component {
         ));
         return list;
       };
+    
+    getWeightFromComponent = () => {
+        var weightFromComponent = document.getElementById("total-weight").innerHTML;
+        this.setState({ totalWeight: weightFromComponent });
+    }
 
     getTotalTrucks = async () => {
+        await this.getWeightFromComponent();
         this.setState({
             bigTruck: 0,
             mediumTruck: 0,
@@ -76,30 +75,6 @@ export default class AddShipmentComponent extends Component {
   render() {
     return (
       <div>
-{/*         <label htmlFor="city-1-input">
-            Cidade Origem
-            <select
-                data-testid="city-1-input"
-                name="city1"
-                onChange= { this.onInputChange }
-            >
-                { this.printCitiesList() }
-            </select>
-            </label>
-            <label htmlFor="city-2-input">
-            Cidade Destino
-            <select
-                data-testid="city-2-input"
-                name="city2"
-                onChange= { this.onInputChange }
-            >
-                { this.printCitiesList() }
-            </select>
-            </label> */}
-            <label htmlFor="totalWeight">Toneladas: </label>
-
-            <input type="number" id="totalWeight" name="totalWeight" onChange={ this.onInputChange }
-            ></input>
             <p>Caminhao Pequeno: {this.state.smallTruck} </p>
             <p>Caminhao Médio: {this.state.mediumTruck} </p>
             <p>Caminhao Grande: {this.state.bigTruck} </p>

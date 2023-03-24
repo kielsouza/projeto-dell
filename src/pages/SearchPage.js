@@ -1,13 +1,12 @@
-import React from 'react'
-import AddShipmentComponent from '../components/AddShipmentComponent'
-import ProductsTable from '../components/ProductsTable'
-import SearchComponent from '../components/SearchComponent'
+import React from 'react';
+import SearchComponent from '../components/SearchComponent';
+import Header from '../components/Header';
 
 export default function SearchPage() {
   return (
     <div>
-        <ProductsTable />
-        <AddShipmentComponent />
+        <Header />
+        <SearchComponent />
     </div>
   )
-}
+};
