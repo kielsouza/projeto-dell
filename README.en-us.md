@@ -1,4 +1,4 @@
-# Dell IT Academy project
+# Dell IT Academy Project
 [![en](https://img.shields.io/badge/lang-en-red.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.en-us.md)
 [![pt-br](https://img.shields.io/badge/lang-pt--br-green.svg)](https://github.com/kielsouza/projeto-dell/blob/master/README.md)
 
