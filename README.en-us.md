@@ -68,7 +68,3 @@ LeMour company wishes to transport the total of 500 cell phones, 100 refrigerato
 4. You do not need to write data in any format, or use database systems.
 
 5. The program should handle invalid input data and report an appropriate message if they occur. Remember to demonstrate this in the screenshots when you run the tests.
-    
-
-
-Translated with www.DeepL.com/Translator (free version)
