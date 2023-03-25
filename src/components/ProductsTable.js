@@ -26,7 +26,7 @@ export default class ProductsTable extends Component {
     sumTotalWeight = () => {
         var weightColumn = document.getElementsByClassName("weight-column");
         var weight = 0;
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 6; i++) {
             console.log()
             weight += parseFloat(weightColumn[i].innerHTML);
         };
@@ -36,10 +36,17 @@ export default class ProductsTable extends Component {
     };
 
     onInputChange = ({ target }) => {
-        const value = target.value; 
-        this.setState({
-          [target.name]: value, // seta os estados dos inputs
-        }, () => this.sumTotalWeight());
+        const value = target.value;
+        if (target.value < 0) {
+            window.alert("O valor deve ser maior que 0!");
+            this.setState({
+                [target.value]: 0,
+            });
+        }else {
+            this.setState({
+                [target.name]: value, // seta os estados dos inputs
+            }, () => this.sumTotalWeight());
+        }
     };
 
     render() {
@@ -62,15 +69,15 @@ export default class ProductsTable extends Component {
                                 <td>{ product.productName }</td>
                                 <td>{ product.productWeight }</td>
                                 <td>
-                                    <input type="number" name={ product.id } onChange={ this.onInputChange } defaultValue = "0"></input>
+                                    <input min="0" type="number" name={ product.id } onChange={ this.onInputChange } defaultValue = "0"></input>
                                 </td>
-                                <td className="weight-column">{ product.productWeight * this.state[product.id] }</td>
+                                <td className="weight-column">{ (product.productWeight * this.state[product.id]).toFixed(2) }</td>
                             </tr>
                             ))
                         ): null }
                         <tr>
                             <td>Toneladas:</td>
-                            <td id="total-weight">{ (this.state.productTotalWeight.toFixed(2)/1000) }</td>
+                            <td id="total-weight">{ (this.state.productTotalWeight/1000).toFixed(4) }</td>
                         </tr>                                                
                     </tbody>
                 </table>
