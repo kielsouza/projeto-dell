@@ -7,8 +7,9 @@ export default class StopsComponent extends Component {
         city1: "ARACAJU",
         city2: "ARACAJU",
         totalDistance: 0,
-        totalPrice: 0,
-        stops: [{}],
+        pricePerStop: 0,
+        stops: [{ city: "ARACAJU", city2: "ARACAJU", pricePerStop: 0 }],
+        totalStopPrice: 0,
     };
 
     componentDidMount() {
@@ -38,33 +39,73 @@ export default class StopsComponent extends Component {
         ));
         return list;
     };
-    useForceUpdate = () => {
-        const [value, setValue] = useState(0); // integer state
-        return () => setValue(value => value + 1); // update state to force render
-        // A function that increment 👆🏻 the previous state like here 
-        // is better than directly setting `setValue(value + 1)`
-    }
-    addStop = () => {
+
+    addStop = async () => {
         if (this.state.city1 === this.state.city2) {
             window.alert("A origem e destino nao podem ser iguais!");
         } else {
+            const costPerKm = (document.getElementById("cost-per-km").innerHTML).replace('R$&nbsp;','');;
+            console.log(costPerKm);
             var stopCity1 = document.getElementById("city-1-input").value;
             var stopCity2 = document.getElementById("city-2-input").value;
-            console.log(stopCity1);
-            console.log(stopCity2);
-            this.state.stops.push({ city1: stopCity1, city2: stopCity2 });
-            this.setState({ city1: stopCity2 });
+            for (let key in csv) { // nested loops para verificar as distancias entre city1 e city 2
+                if (stopCity1 === key) {
+                    for (let key2 in csv[key]) {
+                        if (stopCity2 === key2) {
+                            await this.setState({
+                                totalDistance: csv[key][key2],
+                            })
+                        }
+                    }
+                }
+            };
+            this.state.stops.push({ city1: stopCity1, city2: stopCity2, pricePerStop: (this.state.totalDistance * costPerKm.replace(',','.')).toFixed(2) });
+            this.setState({ city1: stopCity2 }, () => this.sumPricePerStop());
         }
+    };
+
+    sumPricePerStop = () => {
+        var sum = 0;
+         for (let stop in this.state.stops) {
+            sum +=  parseFloat(this.state.stops[stop].pricePerStop);
+        };
+        this.setState({ totalStopPrice: sum });
     };
 
     render() {
         return (
             <div>
-                {this.state.stops.map((stop, index) => (
-                    index > 0 ?
-                        <p key={index}>Parada {index} - Origem: {stop.city1} Destino: {stop.city2}</p>
-                        : null
-                ))}
+
+                <div>
+                    <p></p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Paradas</th>
+                                <th>Custo por trecho</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            {this.state.stops.map((stop, index) => (
+                                index > 0 ? (
+                                    <tr key={index}>
+                                        <td>{index} - Origem: {stop.city1} Destino: {stop.city2}</td>
+                                        <td id="price-per-stop-column">{Number(stop.pricePerStop).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                    </tr>
+                                )
+                                    : null
+                            ))}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Total: </td>
+                                <td>{(this.state.totalStopPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
                 <div>
                     {this.state.stops.length > 1 ? (
                         <label htmlFor="city-1-input">

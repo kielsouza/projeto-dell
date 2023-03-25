@@ -13,6 +13,7 @@ export default class AddShipmentComponent extends Component {
         trucks: "Caminhão de pequeno porte (1 Ton)",
         totalWeight: 0,
         remainingTons: 0,
+        totalTrucks: 0,
     };
 
     componentDidMount() {
@@ -70,6 +71,7 @@ export default class AddShipmentComponent extends Component {
                 }   
             }
         }
+        this.setState({ totalTrucks: (this.state.smallTruck * 4.87) + (this.state.mediumTruck * 11.92) + (this.state.bigTruck * 37.44)});
     };
 
   render() {
@@ -78,6 +80,8 @@ export default class AddShipmentComponent extends Component {
             <p>Caminhao Pequeno: {this.state.smallTruck} </p>
             <p>Caminhao Médio: {this.state.mediumTruck} </p>
             <p>Caminhao Grande: {this.state.bigTruck} </p>
+            <p>Custo total por km:</p>
+            <p id="cost-per-km">{this.state.totalTrucks.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
             <button type="button" onClick={ this.getTotalTrucks }>Total</button>
       </div>
     )
