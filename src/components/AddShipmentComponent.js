@@ -72,6 +72,11 @@ export default class AddShipmentComponent extends Component {
             }
         }
         this.setState({ totalTrucks: (this.state.smallTruck * 4.87) + (this.state.mediumTruck * 11.92) + (this.state.bigTruck * 37.44)});
+        localStorage.setItem('totalCostPerKm', ((this.state.smallTruck * 4.87) + (this.state.mediumTruck * 11.92) + (this.state.bigTruck * 37.44)));
+        localStorage.setItem('smallTruck', this.state.smallTruck);
+        localStorage.setItem('mediumTruck', this.state.mediumTruck);
+        localStorage.setItem('bigTruck', this.state.bigTruck);
+        localStorage.setItem('totalTrucks', ((this.state.smallTruck) + (this.state.mediumTruck) + (this.state.bigTruck)));
     };
 
   render() {
@@ -82,7 +87,7 @@ export default class AddShipmentComponent extends Component {
             <p>Caminhao Grande: {this.state.bigTruck} </p>
             <p>Custo total por km:</p>
             <p id="cost-per-km">{this.state.totalTrucks.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
-            <button type="button" onClick={ this.getTotalTrucks }>Total</button>
+            <button type="button" onClick={ this.getTotalTrucks }>Calcular Frota</button>
       </div>
     )
   }

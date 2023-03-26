@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react'
+import React, { Component } from 'react'
 import csv from '../services/csv'; //dados mockados do CSV
 
 export default class StopsComponent extends Component {
@@ -10,6 +10,8 @@ export default class StopsComponent extends Component {
         pricePerStop: 0,
         stops: [{ city: "ARACAJU", city2: "ARACAJU", pricePerStop: 0 }],
         totalStopPrice: 0,
+        shipments: 0,
+        sumStops: 1,
     };
 
     componentDidMount() {
@@ -44,7 +46,7 @@ export default class StopsComponent extends Component {
         if (this.state.city1 === this.state.city2) {
             window.alert("A origem e destino nao podem ser iguais!");
         } else {
-            const costPerKm = (document.getElementById("cost-per-km").innerHTML).replace('R$&nbsp;','');;
+            const costPerKm = localStorage.getItem("totalCostPerKm");
             console.log(costPerKm);
             var stopCity1 = document.getElementById("city-1-input").value;
             var stopCity2 = document.getElementById("city-2-input").value;
@@ -60,16 +62,58 @@ export default class StopsComponent extends Component {
                 }
             };
             this.state.stops.push({ city1: stopCity1, city2: stopCity2, pricePerStop: (this.state.totalDistance * costPerKm.replace(',','.')).toFixed(2) });
-            this.setState({ city1: stopCity2 }, () => this.sumPricePerStop());
+            if (this.state.stops.length > 2) {
+                localStorage.setItem(`stop${(this.state.stops.length)-1}`, stopCity2);
+            } else {
+                localStorage.setItem("origin", this.state.city1);
+                localStorage.setItem(`stop${(this.state.stops.length)-1}`, stopCity2);
+            }
+            this.setState({ city1: stopCity2, sumStops: this.state.stops.length     }, () => this.sumPricePerStop());
+            localStorage.setItem("sumStops", this.state.sumStops);
         }
     };
 
+    finishShipment = async () => {
+        await this.setState({ shipments: this.state.shipments + 1 });
+        var obj = {};
+        obj.origin = localStorage.getItem("origin");
+        for (let i  = 1; i < this.state.stops.length; i++) {
+            obj[`stop${i}`] = localStorage.getItem(`stop${i}`);
+            obj[`costStop${i}`] = this.state.stops[i].pricePerStop;
+        };
+        obj.totalPrice = localStorage.getItem("totalPrice");
+        obj.costPerKm = localStorage.getItem("totalCostPerKm");
+        obj.celular = localStorage.getItem("celular");
+        obj.geladeira = localStorage.getItem("geladeira");
+        obj.freezer = localStorage.getItem("freezer");
+        obj.cadeira = localStorage.getItem("cadeira");
+        obj.luminaria = localStorage.getItem("luminaria");
+        obj.lavadora = localStorage.getItem("lavadora");
+        obj.totalItems = (Number(obj.celular) + Number(obj.geladeira) + Number(obj.freezer) + Number(obj.cadeira) + Number(obj.luminaria) + Number(obj.lavadora));
+        obj.smallTruck = localStorage.getItem("smallTruck");
+        obj.mediumTruck = localStorage.getItem("mediumTruck");
+        obj.bigTruck = localStorage.getItem("bigTruck");
+        obj.totalTrucks = localStorage.getItem("totalTrucks");
+
+        localStorage.setItem(`shipment${this.state.shipments}`, JSON.stringify(obj));
+        localStorage.setItem("shipments", this.state.shipments);
+        this.setState({
+            city1: "ARACAJU",
+            city2: "ARACAJU",
+            totalDistance: 0,
+            pricePerStop: 0,
+            stops: [{ city: "ARACAJU", city2: "ARACAJU", pricePerStop: 0 }],
+            totalStopPrice: 0,
+        })
+    }
+
     sumPricePerStop = () => {
         var sum = 0;
-         for (let stop in this.state.stops) {
+        for (let stop in this.state.stops) {
             sum +=  parseFloat(this.state.stops[stop].pricePerStop);
         };
         this.setState({ totalStopPrice: sum });
+        localStorage.setItem(`totalPrice`, sum.toFixed(2));
     };
 
     render() {
@@ -147,6 +191,7 @@ export default class StopsComponent extends Component {
                     </label>
                     <button type="button" onClick={this.addStop}>Adicionar Parada</button>
                 </div>
+                <button type="button" onClick={this.finishShipment}>Finalizar Transporte</button>
             </div >
         )
     }

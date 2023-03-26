@@ -37,15 +37,16 @@ export default class ProductsTable extends Component {
 
     onInputChange = ({ target }) => {
         const value = target.value;
-        if (target.value < 0) {
+        if (value < 0) {
             window.alert("O valor deve ser maior que 0!");
             this.setState({
-                [target.value]: 0,
+                [value]: 0,
             });
         }else {
             this.setState({
                 [target.name]: value, // seta os estados dos inputs
             }, () => this.sumTotalWeight());
+            localStorage.setItem(target.name, value);
         }
     };
 

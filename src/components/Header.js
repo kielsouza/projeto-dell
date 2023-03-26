@@ -12,6 +12,9 @@ export default class Header extends Component {
             <Link to="/addshipment">
                 <li>Cadastrar Remessa</li>
             </Link>
+            <Link to="/reports">
+                <li>Relatorios</li>
+            </Link>
         </ul>
       </div>
     )
