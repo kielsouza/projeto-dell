@@ -20,9 +20,17 @@ h1,h2,h3,h4,h5,h6 {
 	margin:0;
 }
 
+.title {
+    padding: 30px;
+	text-align: center;
+}
+
 .table {
 	width:100%;
 	border:1px solid $color-form-highlight;
+	padding-top: 30px;
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
 .table-header {
@@ -52,4 +60,20 @@ h1,h2,h3,h4,h5,h6 {
 
 .table-last-line {
 	font-weight: bolder;
+}
+
+.trucks-container {
+	text-align: center;
+}
+
+.stops-component-container {
+	text-align: center;
+}
+
+.stops-container {
+	padding: 20px;
+}
+
+label {
+	padding: 10px;
 }

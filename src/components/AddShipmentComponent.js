@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import csv from '../services/csv'; //dados mockados do CSV
+import '../scss/Tables.scss';
 
 export default class AddShipmentComponent extends Component {
 
@@ -82,13 +83,26 @@ export default class AddShipmentComponent extends Component {
 
     render() {
         return (
-            <div>
-                <button type="button" onClick={this.getTotalTrucks}>Calcular Frota</button>
-                <p>Caminhao Pequeno: {this.state.smallTruck} </p>
-                <p>Caminhao Médio: {this.state.mediumTruck} </p>
-                <p>Caminhao Grande: {this.state.bigTruck} </p>
-                <p>Custo total por km:</p>
-                <p id="cost-per-km">{this.state.totalTrucks.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+            <div className="trucks-container">
+                <table className="table">
+                    <thead className="table-header">
+                        <tr>
+                            <th className="header-item">Caminhoes Pequenos</th>
+                            <th className="header-item">Caminhoes Medios</th>
+                            <th className="header-item">Caminhoes Grandes</th>
+                            <th className="header-item">Custo por km</th>
+                        </tr>
+                    </thead>
+                    <tbody className="table-body">
+                        <tr className="table-row">
+                            <td className="body-item">{this.state.smallTruck}</td>
+                            <td className="body-item">{this.state.mediumTruck}</td>
+                            <td className="body-item">{this.state.bigTruck}</td>
+                            <td className="body-item" id="cost-per-km">{this.state.totalTrucks.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button className="blue-btn" type="button" onClick={this.getTotalTrucks}>Calcular Frota</button>
             </div>
         )
     }

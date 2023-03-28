@@ -3,7 +3,7 @@ import SearchPage from './pages/SearchPage';
 import AddShipment from './pages/AddShipment';
 import Reports from './pages/Reports';
 import { Route, Switch } from 'react-router-dom';
-
+import './App.scss';
 class App extends React.Component {
   render() {
     return (

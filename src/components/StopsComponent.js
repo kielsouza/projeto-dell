@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import csv from '../services/csv'; //dados mockados do CSV
+import '../scss/Tables.scss';
 
 export default class StopsComponent extends Component {
     state = {
@@ -118,39 +119,38 @@ export default class StopsComponent extends Component {
 
     render() {
         return (
-            <div>
-
+            <div className="stops-component-container">
                 <div>
                     <p></p>
-                    <table>
-                        <thead>
+                    <table className="table">
+                        <thead className="table-header">
                             <tr>
-                                <th>Paradas</th>
-                                <th>Custo por trecho</th>
+                                <th className="header-item">Paradas</th>
+                                <th className="header-item">Custo por trecho</th>
                             </tr>
 
                         </thead>
                         <tbody>
                             {this.state.stops.map((stop, index) => (
                                 index > 0 ? (
-                                    <tr key={index}>
-                                        <td>{index} - Origem: {stop.city1} Destino: {stop.city2}</td>
-                                        <td id="price-per-stop-column">{Number(stop.pricePerStop).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                    <tr className="table-row" key={index}>
+                                        <td className="body-item">{index} - {stop.city1} ---{'>'} {stop.city2}</td>
+                                        <td className="body-item" id="price-per-stop-column">{Number(stop.pricePerStop).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     </tr>
                                 )
                                     : null
                             ))}
                         </tbody>
                         <tfoot>
-                            <tr>
-                                <td>Total: </td>
-                                <td>{(this.state.totalStopPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                            <tr className="table-row">
+                                <td className="table-last-line">Total: </td>
+                                <td className="table-last-line">{(this.state.totalStopPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
 
-                <div>
+                <div className="stops-container">
                     {this.state.stops.length > 1 ? (
                         <label htmlFor="city-1-input">
                             Origem:
@@ -189,9 +189,9 @@ export default class StopsComponent extends Component {
                             {this.printCitiesList()}
                         </select>
                     </label>
-                    <button type="button" onClick={this.addStop}>Adicionar Parada</button>
                 </div>
-                <button type="button" onClick={this.finishShipment}>Finalizar Transporte</button>
+                <button className="blue-btn" type="button" onClick={this.addStop}>Adicionar Parada</button>
+                <button className="red-btn" type="button" onClick={this.finishShipment}>Finalizar Transporte</button>
             </div >
         )
     }

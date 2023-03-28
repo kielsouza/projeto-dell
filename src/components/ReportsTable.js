@@ -33,6 +33,7 @@ export default class ReportsTable extends Component {
             <div>
                 <table className="table">
                     <thead className="table-header">
+                        <tr>
                             <th className="header-item"></th>
                             <th className="header-item">Origem</th>
                             {sumStops.map((index) => (
@@ -43,6 +44,7 @@ export default class ReportsTable extends Component {
                             ))}
                             <th className="header-item">Custo medio por km</th>
                             <th className="header-item">Custo Total</th>
+                        </tr>
                     </thead>
                     <tbody className="table-body">
                         {shipmentsQuantity > 0 ? (
@@ -54,10 +56,10 @@ export default class ReportsTable extends Component {
                                         <td className="body-item" key={index}>{shipment[`stop${index + 1}`]}</td>
                                     ))}
                                     {sumStops.map((index) => (
-                                        <td className="body-item" key={index}>{shipment[`costStop${index + 1}`]}</td>
+                                        <td className="body-item" key={index}>{Number(shipment[`costStop${index + 1}`]).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     ))}
-                                    <td className="body-item">{shipment.costPerKm}</td>
-                                    <td className="body-item">{shipment.totalPrice}</td>
+                                    <td className="body-item">{Number(shipment.costPerKm).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                    <td className="body-item">{Number(shipment.totalPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                 </tr>
                             ))
                         ) : (
@@ -69,6 +71,7 @@ export default class ReportsTable extends Component {
                 </table>
                 <table className="table">
                     <thead className="table-header">
+                        <tr>
                             <th className="header-item"></th>
                             <th className="header-item">Celulares</th>
                             <th className="header-item">Custo Medio Celulares</th>
@@ -83,6 +86,7 @@ export default class ReportsTable extends Component {
                             <th className="header-item">Lavadoras de Roupa</th>
                             <th className="header-item">Custo Medio Lavadoras de Roupa</th>
                             <th className="header-item">Total de Itens</th>
+                        </tr>
                     </thead>
                     <tbody className="table-body">
                         {shipmentsQuantity > 0 ? (
@@ -90,17 +94,17 @@ export default class ReportsTable extends Component {
                                 <tr className="table-row" key={index}>
                                     <td className="body-item">{`Transporte ${index + 1}`}</td>
                                     <td className="body-item">{shipment.celular}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalItems)*shipment.celular).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalItems) * shipment.celular).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.geladeira}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalItems)*shipment.geladeira).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalItems) * shipment.geladeira).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.freezer}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalItems)*shipment.freezer).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalItems) * shipment.freezer).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.cadeira}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalItems)*shipment.cadeira).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalItems) * shipment.cadeira).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.luminaria}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalItems)*shipment.luminaria).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalItems) * shipment.luminaria).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.lavadora}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalItems)*shipment.lavadora).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalItems) * shipment.lavadora).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.totalItems}</td>
                                 </tr>
                             ))
@@ -113,6 +117,7 @@ export default class ReportsTable extends Component {
                 </table>
                 <table className="table">
                     <thead className="table-header">
+                        <tr>
                             <th className="header-item"></th>
                             <th className="header-item">Caminhao Pequeno</th>
                             <th className="header-item">Custo Caminhao Pequeno</th>
@@ -121,18 +126,19 @@ export default class ReportsTable extends Component {
                             <th className="header-item">Caminhao Grande</th>
                             <th className="header-item">Custo Caminhao Pequeno</th>
                             <th className="header-item">Total de caminhoes</th>
+                        </tr>
                     </thead>
                     <tbody className="table-body">
-                    {shipmentsQuantity > 0 ? (
+                        {shipmentsQuantity > 0 ? (
                             shipments.map((shipment, index) => (
                                 <tr className="table-row" key={index}>
                                     <td className="body-item">{`Transporte ${index + 1}`}</td>
                                     <td className="body-item">{shipment.smallTruck}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalTrucks)*shipment.smallTruck).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalTrucks) * shipment.smallTruck).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.mediumTruck}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalTrucks)*shipment.mediumTruck).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalTrucks) * shipment.mediumTruck).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.bigTruck}</td>
-                                    <td className="body-item">{(((shipment.totalPrice)/shipment.totalTrucks)*shipment.bigTruck).toFixed(2)}</td>
+                                    <td className="body-item">{(((shipment.totalPrice) / shipment.totalTrucks) * shipment.bigTruck).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{shipment.totalTrucks}</td>
                                 </tr>
                             ))
