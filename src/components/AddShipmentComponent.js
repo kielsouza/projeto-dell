@@ -83,8 +83,8 @@ export default class AddShipmentComponent extends Component {
 
     render() {
         return (
-            <div className="trucks-container">
-                <table className="table">
+            <div data-testid="add-shipment-container" className="trucks-container">
+                <table data-testid="trucks-table" className="table">
                     <thead className="table-header">
                         <tr>
                             <th className="header-item">Caminhoes Pequenos</th>
@@ -95,10 +95,10 @@ export default class AddShipmentComponent extends Component {
                     </thead>
                     <tbody className="table-body">
                         <tr className="table-row">
-                            <td className="body-item">{this.state.smallTruck}</td>
-                            <td className="body-item">{this.state.mediumTruck}</td>
-                            <td className="body-item">{this.state.bigTruck}</td>
-                            <td className="body-item" id="cost-per-km">{this.state.totalTrucks.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                            <td data-testid="small-truck-quantity" className="body-item">{this.state.smallTruck}</td>
+                            <td data-testid="medium-truck-quantity" className="body-item">{this.state.mediumTruck}</td>
+                            <td data-testid="large-truck-quantity" className="body-item">{this.state.bigTruck}</td>
+                            <td data-testid="cost-per-km" className="body-item" id="cost-per-km">{this.state.totalTrucks.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                         </tr>
                     </tbody>
                 </table>

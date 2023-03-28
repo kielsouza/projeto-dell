@@ -53,9 +53,9 @@ export default class ProductsTable extends Component {
 
     render() {
         return (
-            <div>
+            <div data-testid="products-table-container">
                 <h1 className="title">Personalize seu transporte: </h1>
-                <table className="table">
+                <table data-testid="products-table" className="table">
                     <thead className="table-header">
                         <tr>
                             <th className="header-item">Produto</th>
@@ -72,7 +72,7 @@ export default class ProductsTable extends Component {
                                     <td className="body-item">{product.productName}</td>
                                     <td className="body-item">{product.productWeight}</td>
                                     <td className="body-item">
-                                        <input min="0" type="number" name={product.id} onChange={this.onInputChange} defaultValue="0"></input>
+                                        <input data-testid={`${product.id}-quantity`} min="0" type="number" name={product.id} onChange={this.onInputChange} defaultValue="0"></input>
                                     </td>
                                     <td className="weight-column body-item">{(product.productWeight * this.state[product.id]).toFixed(2)}</td>
                                 </tr>

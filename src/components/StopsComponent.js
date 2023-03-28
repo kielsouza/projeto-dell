@@ -62,14 +62,14 @@ export default class StopsComponent extends Component {
                     }
                 }
             };
-            this.state.stops.push({ city1: stopCity1, city2: stopCity2, pricePerStop: (this.state.totalDistance * costPerKm.replace(',','.')).toFixed(2) });
+            this.state.stops.push({ city1: stopCity1, city2: stopCity2, pricePerStop: (this.state.totalDistance * costPerKm.replace(',', '.')).toFixed(2) });
             if (this.state.stops.length > 2) {
-                localStorage.setItem(`stop${(this.state.stops.length)-1}`, stopCity2);
+                localStorage.setItem(`stop${(this.state.stops.length) - 1}`, stopCity2);
             } else {
                 localStorage.setItem("origin", this.state.city1);
-                localStorage.setItem(`stop${(this.state.stops.length)-1}`, stopCity2);
+                localStorage.setItem(`stop${(this.state.stops.length) - 1}`, stopCity2);
             }
-            this.setState({ city1: stopCity2, sumStops: this.state.stops.length     }, () => this.sumPricePerStop());
+            this.setState({ city1: stopCity2, sumStops: this.state.stops.length }, () => this.sumPricePerStop());
             localStorage.setItem("sumStops", this.state.sumStops);
         }
     };
@@ -78,7 +78,7 @@ export default class StopsComponent extends Component {
         await this.setState({ shipments: this.state.shipments + 1 });
         var obj = {};
         obj.origin = localStorage.getItem("origin");
-        for (let i  = 1; i < this.state.stops.length; i++) {
+        for (let i = 1; i < this.state.stops.length; i++) {
             obj[`stop${i}`] = localStorage.getItem(`stop${i}`);
             obj[`costStop${i}`] = this.state.stops[i].pricePerStop;
         };
@@ -111,7 +111,7 @@ export default class StopsComponent extends Component {
     sumPricePerStop = () => {
         var sum = 0;
         for (let stop in this.state.stops) {
-            sum +=  parseFloat(this.state.stops[stop].pricePerStop);
+            sum += parseFloat(this.state.stops[stop].pricePerStop);
         };
         this.setState({ totalStopPrice: sum });
         localStorage.setItem(`totalPrice`, sum.toFixed(2));
@@ -119,10 +119,10 @@ export default class StopsComponent extends Component {
 
     render() {
         return (
-            <div className="stops-component-container">
+            <div data-testid="stops-component-container" className="stops-component-container">
                 <div>
                     <p></p>
-                    <table className="table">
+                    <table data-testid="stops-table" className="table">
                         <thead className="table-header">
                             <tr>
                                 <th className="header-item">Paradas</th>
@@ -134,8 +134,8 @@ export default class StopsComponent extends Component {
                             {this.state.stops.map((stop, index) => (
                                 index > 0 ? (
                                     <tr className="table-row" key={index}>
-                                        <td className="body-item">{index} - {stop.city1} ---{'>'} {stop.city2}</td>
-                                        <td className="body-item" id="price-per-stop-column">{Number(stop.pricePerStop).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                        <td data-testid={`stop-table-line-${index}-cities`} className="body-item">{index} - {stop.city1} ---{'>'} {stop.city2}</td>
+                                        <td data-testid={`stop-table-line-${index}-price`} className="body-item" id="price-per-stop-column">{Number(stop.pricePerStop).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     </tr>
                                 )
                                     : null
@@ -143,8 +143,8 @@ export default class StopsComponent extends Component {
                         </tbody>
                         <tfoot>
                             <tr className="table-row">
-                                <td className="table-last-line">Total: </td>
-                                <td className="table-last-line">{(this.state.totalStopPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                <td data-testid="stop-last-line-total" className="table-last-line">Total: </td>
+                                <td data-testid="stop-last-line-price" className="table-last-line">{(this.state.totalStopPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -171,6 +171,7 @@ export default class StopsComponent extends Component {
                         <label htmlFor="city-1-input">
                             Origem:
                             <select
+                                data-testid="city-1-input"
                                 id="city-1-input"
                                 name="city1"
                                 onChange={this.onInputChange}
@@ -182,6 +183,7 @@ export default class StopsComponent extends Component {
                     <label htmlFor="city-2-input">
                         Destino:
                         <select
+                            data-testid="city-2-input"
                             id="city-2-input"
                             name="city2"
                             onChange={this.onInputChange}

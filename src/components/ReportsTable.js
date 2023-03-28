@@ -30,8 +30,8 @@ export default class ReportsTable extends Component {
     render() {
         const { shipments, shipmentsQuantity, sumStops } = this.state;
         return (
-            <div>
-                <table className="table">
+            <div data-testid="reports-table-container">
+                <table data-testid="reports-table-1" className="table">
                     <thead className="table-header">
                         <tr>
                             <th className="header-item"></th>
@@ -69,7 +69,7 @@ export default class ReportsTable extends Component {
                         )}
                     </tbody>
                 </table>
-                <table className="table">
+                <table data-testid="reports-table-2" className="table">
                     <thead className="table-header">
                         <tr>
                             <th className="header-item"></th>
@@ -110,12 +110,12 @@ export default class ReportsTable extends Component {
                             ))
                         ) : (
                             <tr>
-                                <td><p>Carregando...</p></td>
+                                <td data-testid="loading"><p>Carregando...</p></td>
                             </tr>
                         )}
                     </tbody>
                 </table>
-                <table className="table">
+                <table data-testid="reports-table-3" className="table">
                     <thead className="table-header">
                         <tr>
                             <th className="header-item"></th>

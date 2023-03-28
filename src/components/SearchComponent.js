@@ -21,7 +21,7 @@ export default class SearchComponent extends Component {
     const value = target.value;
     this.setState({
       [target.name]: value, // seta os estados dos inputs
-    });
+    }, () => this.shipmentTotal());
   };
 
   printCitiesList = () => {
@@ -29,6 +29,7 @@ export default class SearchComponent extends Component {
       <option
         key={city}
         value={city}
+        data-testid="cities-option"
       >
         {city}
       </option>
@@ -106,8 +107,8 @@ export default class SearchComponent extends Component {
           </label>
         </div>
         <div className="btn-container">
-          <button className="blue-btn" onClick={this.shipmentTotal}> Ok </button>
-          <p className="search-display">De {this.state.city1} para {this.state.city2}, utilizando um {this.state.truck}, a distância é de {this.state.totalDistance} km e o custo será de R$ {this.state.totalPrice.toFixed(2)}.</p>
+          {/* <button data-testid="fetch-search-btn" className="blue-btn" onClick={this.shipmentTotal}> Ok </button> */}
+          <p data-testid="sys-answer" className="search-display">De {this.state.city1} para {this.state.city2}, utilizando um {this.state.truck}, a distância é de {this.state.totalDistance} km e o custo será de R$ {this.state.totalPrice.toFixed(2)}.</p>
         </div>
       </div>
     )

@@ -5,16 +5,16 @@ import '../scss/Header.scss';
 export default class Header extends Component {
   render() {
     return (
-      <div className="header-div">
+      <div data-testid="page-header" className="header-div">
         <h2 className="header-title">Dely</h2>
         <Link to="/">
           <p className="header-links">Consultar Valores</p>
         </Link>
         <Link to="/addshipment">
-          <p className="header-links">Cadastrar Remessa</p>
+          <p className="header-links" data-testid="add-shipment-btn">Cadastrar Remessa</p>
         </Link>
         <Link to="/reports">
-          <p className="header-links">Relatorios</p>
+          <p className="header-links" data-testid="reports-btn">Relatorios</p>
         </Link>
       </div>
     )
