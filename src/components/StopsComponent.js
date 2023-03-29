@@ -46,67 +46,97 @@ export default class StopsComponent extends Component {
     addStop = async () => {
         if (this.state.city1 === this.state.city2) {
             window.alert("A origem e destino nao podem ser iguais!");
-        } else {
-            const costPerKm = localStorage.getItem("totalCostPerKm");
-            console.log(costPerKm);
-            var stopCity1 = document.getElementById("city-1-input").value;
-            var stopCity2 = document.getElementById("city-2-input").value;
-            for (let key in csv) { // nested loops para verificar as distancias entre city1 e city 2
-                if (stopCity1 === key) {
-                    for (let key2 in csv[key]) {
-                        if (stopCity2 === key2) {
-                            await this.setState({
-                                totalDistance: csv[key][key2],
-                            })
-                        }
-                    }
-                }
-            };
-            this.state.stops.push({ city1: stopCity1, city2: stopCity2, pricePerStop: (this.state.totalDistance * costPerKm.replace(',', '.')).toFixed(2) });
+            return;
+        }
+
+        const costPerKm = localStorage.getItem("totalCostPerKm");
+        const stopCity1 = document.getElementById("city-1-input").value;
+        const stopCity2 = document.getElementById("city-2-input").value;
+
+        const distance = Object.values(csv).find((city) => city[stopCity2] !== undefined)?.[stopCity2];
+        if (distance !== undefined) {
+            await this.setState({
+                totalDistance: distance,
+            });
+        }
+
+        this.setState((prevState) => ({
+            stops: [
+                ...prevState.stops,
+                {
+                    city1: stopCity1,
+                    city2: stopCity2,
+                    pricePerStop: (prevState.totalDistance * costPerKm.replace(",", ".")).toFixed(2),
+                },
+            ],
+            city1: stopCity2,
+            sumStops: prevState.stops.length + 1,
+        }), () => {
+            this.sumPricePerStop();
+            localStorage.setItem("sumStops", this.state.sumStops);
             if (this.state.stops.length > 2) {
-                localStorage.setItem(`stop${(this.state.stops.length) - 1}`, stopCity2);
+                localStorage.setItem(`stop${this.state.stops.length - 1}`, stopCity2);
             } else {
                 localStorage.setItem("origin", this.state.city1);
-                localStorage.setItem(`stop${(this.state.stops.length) - 1}`, stopCity2);
+                localStorage.setItem(`stop${this.state.stops.length - 1}`, stopCity2);
             }
-            this.setState({ city1: stopCity2, sumStops: this.state.stops.length }, () => this.sumPricePerStop());
-            localStorage.setItem("sumStops", this.state.sumStops);
-        }
+        });
     };
 
+
     finishShipment = async () => {
-        await this.setState({ shipments: this.state.shipments + 1 });
-        var obj = {};
-        obj.origin = localStorage.getItem("origin");
-        for (let i = 1; i < this.state.stops.length; i++) {
-            obj[`stop${i}`] = localStorage.getItem(`stop${i}`);
-            obj[`costStop${i}`] = this.state.stops[i].pricePerStop;
+        await this.setState((prevState) => ({
+            shipments: prevState.shipments + 1,
+        }));
+
+        const obj = {
+            origin: localStorage.getItem("origin"),
+            ...this.state.stops.slice(1).reduce((acc, stop, i) => {
+                acc[`stop${i + 1}`] = localStorage.getItem(`stop${i + 1}`);
+                acc[`costStop${i + 1}`] = stop.pricePerStop;
+                return acc;
+            }, {}),
+            totalPrice: localStorage.getItem("totalPrice"),
+            costPerKm: localStorage.getItem("totalCostPerKm"),
+            celular: localStorage.getItem("celular"),
+            geladeira: localStorage.getItem("geladeira"),
+            freezer: localStorage.getItem("freezer"),
+            cadeira: localStorage.getItem("cadeira"),
+            luminaria: localStorage.getItem("luminaria"),
+            lavadora: localStorage.getItem("lavadora"),
+            totalItems:
+                Number(localStorage.getItem("celular")) +
+                Number(localStorage.getItem("geladeira")) +
+                Number(localStorage.getItem("freezer")) +
+                Number(localStorage.getItem("cadeira")) +
+                Number(localStorage.getItem("luminaria")) +
+                Number(localStorage.getItem("lavadora")),
+            smallTruck: localStorage.getItem("smallTruck"),
+            mediumTruck: localStorage.getItem("mediumTruck"),
+            bigTruck: localStorage.getItem("bigTruck"),
+            totalTrucks: localStorage.getItem("totalTrucks"),
         };
-        obj.totalPrice = localStorage.getItem("totalPrice");
-        obj.costPerKm = localStorage.getItem("totalCostPerKm");
-        obj.celular = localStorage.getItem("celular");
-        obj.geladeira = localStorage.getItem("geladeira");
-        obj.freezer = localStorage.getItem("freezer");
-        obj.cadeira = localStorage.getItem("cadeira");
-        obj.luminaria = localStorage.getItem("luminaria");
-        obj.lavadora = localStorage.getItem("lavadora");
-        obj.totalItems = (Number(obj.celular) + Number(obj.geladeira) + Number(obj.freezer) + Number(obj.cadeira) + Number(obj.luminaria) + Number(obj.lavadora));
-        obj.smallTruck = localStorage.getItem("smallTruck");
-        obj.mediumTruck = localStorage.getItem("mediumTruck");
-        obj.bigTruck = localStorage.getItem("bigTruck");
-        obj.totalTrucks = localStorage.getItem("totalTrucks");
 
         localStorage.setItem(`shipment${this.state.shipments}`, JSON.stringify(obj));
         localStorage.setItem("shipments", this.state.shipments);
-        this.setState({
+
+        await this.setState({
             city1: "ARACAJU",
             city2: "ARACAJU",
             totalDistance: 0,
             pricePerStop: 0,
             stops: [{ city: "ARACAJU", city2: "ARACAJU", pricePerStop: 0 }],
             totalStopPrice: 0,
+        }, () => {
+            localStorage.setItem("celular", 0);
+            localStorage.setItem('geladeria', 0);
+            localStorage.setItem('freezer', 0);
+            localStorage.setItem('cadeira', 0);
+            localStorage.setItem('luminaria', 0);
+            localStorage.setItem('lavadora', 0);
+            document.location.reload();
         })
-    }
+    };
 
     sumPricePerStop = () => {
         var sum = 0;
@@ -118,8 +148,12 @@ export default class StopsComponent extends Component {
     };
 
     render() {
+        const { stops, totalStopPrice, city1 } = this.state;
         return (
-            <div data-testid="stops-component-container" className="stops-component-container">
+            <div
+                data-testid="stops-component-container"
+                className="stops-component-container"
+            >
                 <div>
                     <p></p>
                     <table data-testid="stops-table" className="table">
@@ -128,42 +162,52 @@ export default class StopsComponent extends Component {
                                 <th className="header-item">Paradas</th>
                                 <th className="header-item">Custo por trecho</th>
                             </tr>
-
                         </thead>
                         <tbody>
-                            {this.state.stops.map((stop, index) => (
-                                index > 0 ? (
-                                    <tr className="table-row" key={index}>
-                                        <td data-testid={`stop-table-line-${index}-cities`} className="body-item">{index} - {stop.city1} ---{'>'} {stop.city2}</td>
-                                        <td data-testid={`stop-table-line-${index}-price`} className="body-item" id="price-per-stop-column">{Number(stop.pricePerStop).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
-                                    </tr>
-                                )
-                                    : null
+                            {stops.slice(1).map((stop, index) => (
+                                <tr className="table-row" key={index}>
+                                    <td
+                                        data-testid={`stop-table-line-${index + 1}-cities`}
+                                        className="body-item"
+                                    >
+                                        {index + 1} - {stop.city1} ---&gt; {stop.city2}
+                                    </td>
+                                    <td
+                                        data-testid={`stop-table-line-${index + 1}-price`}
+                                        className="body-item"
+                                        id="price-per-stop-column"
+                                    >
+                                        {Number(stop.pricePerStop).toLocaleString('pt-BR', {
+                                            style: 'currency',
+                                            currency: 'BRL',
+                                        })}
+                                    </td>
+                                </tr>
                             ))}
                         </tbody>
                         <tfoot>
                             <tr className="table-row">
-                                <td data-testid="stop-last-line-total" className="table-last-line">Total: </td>
-                                <td data-testid="stop-last-line-price" className="table-last-line">{(this.state.totalStopPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                <td data-testid="stop-last-line-total" className="table-last-line">
+                                    Total:{' '}
+                                </td>
+                                <td data-testid="stop-last-line-price" className="table-last-line">
+                                    {totalStopPrice.toLocaleString('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL',
+                                    })}
+                                </td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
 
                 <div className="stops-container">
-                    {this.state.stops.length > 1 ? (
+                    {stops.length > 1 ? (
                         <label htmlFor="city-1-input">
                             Origem:
-                            <select
-                                id="city-1-input"
-                                name="city1"
-                                onChange={this.onInputChange}
-                            >
-                                <option
-                                    key={this.state.city1}
-                                    value={this.state.city1}
-                                >
-                                    {this.state.city1}
+                            <select id="city-1-input" name="city1" onChange={this.onInputChange}>
+                                <option key={city1} value={city1}>
+                                    {city1}
                                 </option>
                             </select>
                         </label>
@@ -192,9 +236,23 @@ export default class StopsComponent extends Component {
                         </select>
                     </label>
                 </div>
-                <button className="blue-btn" type="button" onClick={this.addStop}>Adicionar Parada</button>
-                <button className="red-btn" type="button" onClick={this.finishShipment}>Finalizar Transporte</button>
-            </div >
+
+                <button
+                    data-testid="add-stop-button"
+                    className="blue-btn"
+                    type="button"
+                    onClick={this.addStop}
+                >
+                    Adicionar Parada
+                </button>
+                <button
+                    className="red-btn"
+                    type="button"
+                    onClick={this.finishShipment}
+                >
+                    Finalizar Transporte
+                </button>
+            </div>
         )
     }
 }

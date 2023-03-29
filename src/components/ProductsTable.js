@@ -28,12 +28,11 @@ export default class ProductsTable extends Component {
         var weightColumn = document.getElementsByClassName("weight-column");
         var weight = 0;
         for (let i = 0; i < 6; i++) {
-            console.log()
             weight += parseFloat(weightColumn[i].innerHTML);
         };
         this.setState({
             productTotalWeight: weight,
-        });
+        }, () => localStorage.setItem('totalWeight', (this.state.productTotalWeight / 1000).toFixed(4)));
     };
 
     onInputChange = ({ target }) => {

@@ -8,7 +8,6 @@ export default function AddShipment() {
   return (
     <div>
         <Header />
-        <ProductsTable />
         <AddShipmentComponent />
         <StopsComponent />
     </div>
