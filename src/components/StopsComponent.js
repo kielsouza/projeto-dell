@@ -43,84 +43,74 @@ export default class StopsComponent extends Component {
         return list;
     };
 
-    addStop = async () => {
+    addStop = async () => { // função para adicionar paradas no localStorage
         if (this.state.city1 === this.state.city2) {
             window.alert("A origem e destino nao podem ser iguais!");
-            return;
-        }
-
-        const costPerKm = localStorage.getItem("totalCostPerKm");
-        const stopCity1 = document.getElementById("city-1-input").value;
-        const stopCity2 = document.getElementById("city-2-input").value;
-
-        const distance = Object.values(csv).find((city) => city[stopCity2] !== undefined)?.[stopCity2];
-        if (distance !== undefined) {
-            await this.setState({
-                totalDistance: distance,
-            });
-        }
-
-        this.setState((prevState) => ({
-            stops: [
-                ...prevState.stops,
-                {
-                    city1: stopCity1,
-                    city2: stopCity2,
-                    pricePerStop: (prevState.totalDistance * costPerKm.replace(",", ".")).toFixed(2),
-                },
-            ],
-            city1: stopCity2,
-            sumStops: prevState.stops.length + 1,
-        }), () => {
-            this.sumPricePerStop();
-            localStorage.setItem("sumStops", this.state.sumStops);
-            if (this.state.stops.length > 2) {
-                localStorage.setItem(`stop${this.state.stops.length - 1}`, stopCity2);
-            } else {
+        } else {
+            const costPerKm = localStorage.getItem("totalCostPerKm");
+            var stopCity1 = document.getElementById("city-1-input").value;
+            var stopCity2 = document.getElementById("city-2-input").value;
+            for (let key in csv) { // nested loops para verificar as distancias entre city1 e city 2
+                if (stopCity1 === key) {
+                    for (let key2 in csv[key]) {
+                        if (stopCity2 === key2) {
+                            await this.setState({
+                                totalDistance: csv[key][key2],
+                            })
+                        }
+                    }
+                }
+            };
+            this.setState((prevState) => ({ // setState para adicionar as paradas de acordo com os inputs
+                stops: [
+                    ...prevState.stops,
+                    {
+                        city1: stopCity1,
+                        city2: stopCity2,
+                        pricePerStop: (prevState.totalDistance * costPerKm.replace(",", ".")).toFixed(2),
+                    },
+                ],
+            }));
+            if (this.state.stops.length > 1) { // se houver mais de uma parada, adiciona apenas a parada no localStorage
+                localStorage.setItem(`stop${(this.state.stops.length)}`, stopCity2);
+            } else { // se houver apenas uma parada, adiciona a origem e a parada no localStorage
                 localStorage.setItem("origin", this.state.city1);
-                localStorage.setItem(`stop${this.state.stops.length - 1}`, stopCity2);
+                localStorage.setItem(`stop${(this.state.stops.length)}`, stopCity2);
             }
-        });
+            this.setState({
+                city1: stopCity2, // reseta o input de cidade 1 para a primeira parada
+                sumStops: this.state.stops.length, // soma o numero de paradas
+            }, () => this.sumPricePerStop());
+            localStorage.setItem("sumStops", this.state.sumStops);
+        }
     };
 
 
-    finishShipment = async () => {
-        await this.setState((prevState) => ({
-            shipments: prevState.shipments + 1,
-        }));
-
-        const obj = {
-            origin: localStorage.getItem("origin"),
-            ...this.state.stops.slice(1).reduce((acc, stop, i) => {
-                acc[`stop${i + 1}`] = localStorage.getItem(`stop${i + 1}`);
-                acc[`costStop${i + 1}`] = stop.pricePerStop;
-                return acc;
-            }, {}),
-            totalPrice: localStorage.getItem("totalPrice"),
-            costPerKm: localStorage.getItem("totalCostPerKm"),
-            celular: localStorage.getItem("celular"),
-            geladeira: localStorage.getItem("geladeira"),
-            freezer: localStorage.getItem("freezer"),
-            cadeira: localStorage.getItem("cadeira"),
-            luminaria: localStorage.getItem("luminaria"),
-            lavadora: localStorage.getItem("lavadora"),
-            totalItems:
-                Number(localStorage.getItem("celular")) +
-                Number(localStorage.getItem("geladeira")) +
-                Number(localStorage.getItem("freezer")) +
-                Number(localStorage.getItem("cadeira")) +
-                Number(localStorage.getItem("luminaria")) +
-                Number(localStorage.getItem("lavadora")),
-            smallTruck: localStorage.getItem("smallTruck"),
-            mediumTruck: localStorage.getItem("mediumTruck"),
-            bigTruck: localStorage.getItem("bigTruck"),
-            totalTrucks: localStorage.getItem("totalTrucks"),
+    finishShipment = async () => { // função para adicionar o transporte inteiro no localStorage
+        await this.setState({ shipments: this.state.shipments + 1 }); // contador de transportes
+        var obj = {};
+        obj.origin = localStorage.getItem("origin");
+        for (let i = 1; i < this.state.stops.length; i++) { // para cada parada do transporte, adiciona ela e o custo no obj
+            obj[`stop${i}`] = localStorage.getItem(`stop${i}`);
+            obj[`costStop${i}`] = this.state.stops[i].pricePerStop;
         };
+        obj.totalPrice = localStorage.getItem("totalPrice"); // as lihas seguintes adicionam os detalhes do transporte ao obj
+        obj.costPerKm = localStorage.getItem("totalCostPerKm");
+        obj.celular = localStorage.getItem("celular");
+        obj.geladeira = localStorage.getItem("geladeira");
+        obj.freezer = localStorage.getItem("freezer");
+        obj.cadeira = localStorage.getItem("cadeira");
+        obj.luminaria = localStorage.getItem("luminaria");
+        obj.lavadora = localStorage.getItem("lavadora");
+        obj.totalItems = (Number(obj.celular) + Number(obj.geladeira) + Number(obj.freezer) + Number(obj.cadeira) + Number(obj.luminaria) + Number(obj.lavadora));
+        obj.smallTruck = localStorage.getItem("smallTruck");
+        obj.mediumTruck = localStorage.getItem("mediumTruck");
+        obj.bigTruck = localStorage.getItem("bigTruck");
+        obj.totalTrucks = localStorage.getItem("totalTrucks");
 
-        localStorage.setItem(`shipment${this.state.shipments}`, JSON.stringify(obj));
-        localStorage.setItem("shipments", this.state.shipments);
-
-        await this.setState({
+        localStorage.setItem(`shipment${this.state.shipments}`, JSON.stringify(obj)); // seta o transporte do localStorage com o obj
+        localStorage.setItem("shipments", this.state.shipments); // quantidade de transportes 
+        this.setState({ // reset de states e localStorage após finalizado o transporte
             city1: "ARACAJU",
             city2: "ARACAJU",
             totalDistance: 0,
@@ -134,11 +124,10 @@ export default class StopsComponent extends Component {
             localStorage.setItem('cadeira', 0);
             localStorage.setItem('luminaria', 0);
             localStorage.setItem('lavadora', 0);
-            document.location.reload();
-        })
+        });
     };
 
-    sumPricePerStop = () => {
+    sumPricePerStop = () => { // soma de custo por parada
         var sum = 0;
         for (let stop in this.state.stops) {
             sum += parseFloat(this.state.stops[stop].pricePerStop);
@@ -246,6 +235,7 @@ export default class StopsComponent extends Component {
                     Adicionar Parada
                 </button>
                 <button
+                    data-testid="add-shipment-button"
                     className="red-btn"
                     type="button"
                     onClick={this.finishShipment}

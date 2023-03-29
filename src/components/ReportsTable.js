@@ -12,7 +12,7 @@ export default class ReportsTable extends Component {
         this.getShipmentObj();
     };
 
-    getShipmentObj = async () => {
+    getShipmentObj = async () => { // função para buscar a quantidade de paradas, transportes e o objeto de transporte
         var obj = {};
         var quantity = localStorage.getItem("shipments");
         for (let i = 0; i < quantity; i++) {
@@ -37,10 +37,10 @@ export default class ReportsTable extends Component {
                             <th className="header-item"></th>
                             <th className="header-item">Origem</th>
                             {sumStops.map((index) => (
-                                <th className="header-item" key={index}>{`Parada ${index + 1}`}</th>
-                            ))}
-                            {sumStops.map((index) => (
-                                <th className="header-item" key={index}>{`Custo Parada ${index + 1}`}</th>
+                                <React.Fragment key={index}>
+                                    <th className="header-item">{`Parada ${index + 1}`}</th>
+                                    <th className="header-item">{`Custo Parada ${index + 1}`}</th>
+                                </React.Fragment>
                             ))}
                             <th className="header-item">Custo medio por km</th>
                             <th className="header-item">Custo Total</th>
@@ -49,14 +49,14 @@ export default class ReportsTable extends Component {
                     <tbody className="table-body">
                         {shipmentsQuantity > 0 ? (
                             shipments.map((shipment, index) => (
-                                <tr className="table-row" key={index}>
+                                <tr data-testid={`reports-table-1-line-${index + 1}`} className="table-row" key={index}>
                                     <td className="body-item">{`Transporte ${index + 1}`}</td>
                                     <td className="body-item">{shipment.origin}</td>
                                     {sumStops.map((index) => (
-                                        <td className="body-item" key={index}>{shipment[`stop${index + 1}`]}</td>
-                                    ))}
-                                    {sumStops.map((index) => (
-                                        <td className="body-item" key={index}>{Number(shipment[`costStop${index + 1}`]).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                        <React.Fragment key={index}>
+                                            <td className="body-item">{shipment[`stop${index + 1}`]}</td>
+                                            <td className="body-item">{Number(shipment[`costStop${index + 1}`]).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                                        </React.Fragment>
                                     ))}
                                     <td className="body-item">{Number(shipment.costPerKm).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                                     <td className="body-item">{Number(shipment.totalPrice).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>

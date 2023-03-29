@@ -1,6 +1,6 @@
 /* eslint-disable testing-library/no-unnecessary-act */
 import React from 'react';
-import { screen, render, fireEvent, waitFor, within } from '@testing-library/react';
+import { screen, render, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import App from '../App';
