@@ -1,0 +1,25 @@
+.header-div {
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+}
+
+.header-links {
+    color: white;
+    display: inline-block;
+    padding-left: 3%;
+}
+
+.header-title {
+    color: white;
+    display: inline-block;
+    padding-left: 3%;
+}
+
+
+
+a:link { text-decoration: none; }
+
+a:visited { text-decoration: none; }
+
+a:hover { text-decoration: none; font-weight: bolder; }
+
+a:active { text-decoration: none; }
